@@ -1,0 +1,11 @@
+# Emacs
+*~
+#*
+.#*
+
+# Mac OS X
+.DS_Store
+
+# Exacutables
+/bin
+
