@@ -1,3 +1,3 @@
-module rpucella.net/go-lisp-command-language
+module rpucella.net/go-cl
 
 go 1.13

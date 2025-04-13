@@ -1,2 +1,2 @@
 build:
-	go build -o bin/glisp cmd/glisp/*.go
+	go build -o bin/gcl cmd/gcl/*.go

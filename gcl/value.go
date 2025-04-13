@@ -1,4 +1,4 @@
-package glisp
+package gcl
 
 type Value interface {
 	Display() string

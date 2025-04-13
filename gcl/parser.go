@@ -1,4 +1,4 @@
-package glisp
+package gcl
 
 import "errors"
 import "fmt"

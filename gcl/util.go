@@ -1,4 +1,4 @@
-package glisp
+package gcl
 
 func min(a int, b int) int {
 	if a > b {

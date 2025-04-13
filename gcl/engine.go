@@ -1,4 +1,4 @@
-package glisp
+package gcl
 
 import "fmt"
 import "bufio"
