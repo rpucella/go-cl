@@ -533,7 +533,7 @@ var primList = []Primitive{
 					currents[i] = tail
 				}
 			}
-			return NewNil(), nil
+			return NewVoid(), nil
 		},
 	},
 
@@ -708,9 +708,9 @@ var primList = []Primitive{
 		},
 	},
 
-	Primitive{"nil?", 1, 1,
+	Primitive{"void?", 1, 1,
 		func(name string, args []Value) (Value, error) {
-			return NewBoolean(args[0].IsNil()), nil
+			return NewBoolean(args[0].IsVoid()), nil
 		},
 	},
 }

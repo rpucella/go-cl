@@ -26,7 +26,7 @@ func (v *vReference) Apply(args []Value) (Value, error) {
 	}
 	if len(args) == 1 {
 		v.content = args[0]
-		return &vNil{}, nil
+		return &vVoid{}, nil
 	}
 	return v.content, nil
 }
@@ -71,7 +71,7 @@ func (v *vReference) IsTrue() bool {
 	return false
 }
 
-func (v *vReference) IsNil() bool {
+func (v *vReference) IsVoid() bool {
 	return false
 }
 

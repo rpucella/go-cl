@@ -64,7 +64,7 @@ func (v *vString) IsTrue() bool {
 	return (v.val != "")
 }
 
-func (v *vString) IsNil() bool {
+func (v *vString) IsVoid() bool {
 	return false
 }
 

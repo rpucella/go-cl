@@ -76,7 +76,7 @@ func (v *vCons) IsTrue() bool {
 	return true
 }
 
-func (v *vCons) IsNil() bool {
+func (v *vCons) IsVoid() bool {
 	return false
 }
 

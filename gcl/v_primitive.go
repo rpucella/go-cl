@@ -65,7 +65,7 @@ func (v *vPrimitive) IsTrue() bool {
 	return true
 }
 
-func (v *vPrimitive) IsNil() bool {
+func (v *vPrimitive) IsVoid() bool {
 	return false
 }
 

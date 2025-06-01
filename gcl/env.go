@@ -25,13 +25,13 @@ func update(env *Env, name string, v Value) {
 
 func layer(env *Env, names []string, values []Value) *Env {
 	// if values is nil or smaller than names, then
-	// remaining names are bound to #nil
+	// remaining names are bound to void
 	bindings := map[string]Value{}
 	for i, name := range names {
 		if values != nil && i < len(values) {
 			bindings[name] = values[i]
 		} else {
-			bindings[name] = &vNil{}
+			bindings[name] = &vVoid{}
 		}
 	}
 	return &Env{bindings: bindings, previous: env}

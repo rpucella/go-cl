@@ -4,102 +4,101 @@ import (
 	"fmt"
 )
 
-type vNil struct {
+type vVoid struct {
 }
 
-func NewNil() Value {
-	return &vNil{}
+func NewVoid() Value {
+	return &vVoid{}
 }
 
-func (v *vNil) Display() string {
-	// figure out if this Is the right thing?
-	return "#nil"
+func (v *vVoid) Display() string {
+	return "void"
 }
 
-func (v *vNil) displayCDR() string {
+func (v *vVoid) displayCDR() string {
 	panic(fmt.Sprintf("unchecked access to %s", v.str()))
 }
 
-func (v *vNil) Apply(args []Value) (Value, error) {
+func (v *vVoid) Apply(args []Value) (Value, error) {
 	return nil, fmt.Errorf("Value %s not applicable", v.str())
 }
 
-func (v *vNil) str() string {
+func (v *vVoid) str() string {
 	return fmt.Sprintf("VNil")
 }
 
-func (v *vNil) IsAtom() bool {
+func (v *vVoid) IsAtom() bool {
 	return false
 }
 
-func (v *vNil) IsSymbol() bool {
+func (v *vVoid) IsSymbol() bool {
 	return false
 }
 
-func (v *vNil) IsCons() bool {
+func (v *vVoid) IsCons() bool {
 	return false
 }
 
-func (v *vNil) IsEmpty() bool {
+func (v *vVoid) IsEmpty() bool {
 	return false
 }
 
-func (v *vNil) IsNumber() bool {
+func (v *vVoid) IsNumber() bool {
 	return false
 }
 
-func (v *vNil) IsBool() bool {
+func (v *vVoid) IsBool() bool {
 	return false
 }
 
-func (v *vNil) IsString() bool {
+func (v *vVoid) IsString() bool {
 	return false
 }
 
-func (v *vNil) IsFunction() bool {
+func (v *vVoid) IsFunction() bool {
 	return false
 }
 
-func (v *vNil) IsTrue() bool {
+func (v *vVoid) IsTrue() bool {
 	return false
 }
 
-func (v *vNil) IsNil() bool {
+func (v *vVoid) IsVoid() bool {
 	return true
 }
 
-func (v *vNil) IsEqual(vv Value) bool {
-	return vv.IsNil()
+func (v *vVoid) IsEqual(vv Value) bool {
+	return vv.IsVoid()
 }
 
-func (v *vNil) Type() string {
-	return "nil"
+func (v *vVoid) Type() string {
+	return "void"
 }
 
-func (v *vNil) AsInteger() (int, bool) {
+func (v *vVoid) AsInteger() (int, bool) {
 	return 0, false
 }
 
-func (v *vNil) AsBoolean() (bool, bool) {
+func (v *vVoid) AsBoolean() (bool, bool) {
 	return false, false
 }
 
-func (v *vNil) AsString() (string, bool) {
+func (v *vVoid) AsString() (string, bool) {
 	return "", false
 }
 
-func (v *vNil) AsSymbol() (string, bool) {
+func (v *vVoid) AsSymbol() (string, bool) {
 	return "", false
 }
 
-func (v *vNil) AsCons() (Value, Value, bool) {
+func (v *vVoid) AsCons() (Value, Value, bool) {
 	return nil, nil, false
 }
 
-func (v *vNil) AsReference() (Value, func(Value), bool) {
+func (v *vVoid) AsReference() (Value, func(Value), bool) {
 	return nil, nil, false
 }
 
-func (v *vNil) SetReference(Value) bool {
+func (v *vVoid) SetReference(Value) bool {
 	return false
 }

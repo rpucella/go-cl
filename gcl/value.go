@@ -15,7 +15,7 @@ type Value interface {
 	IsAtom() bool
 	IsEmpty() bool
 	IsTrue() bool
-	IsNil() bool
+	IsVoid() bool
 	IsFunction() bool
 	//isEq() bool    -- don't think we need pointer equality for now - = is enough?
 	IsEqual(Value) bool

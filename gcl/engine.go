@@ -10,10 +10,9 @@ type Engine struct {
 
 func NewEngine() Engine {
 	coreBindings := corePrimitives()
-	coreBindings["true"] = NewBoolean(true)
-	coreBindings["false"] = NewBoolean(false)
+	// These are not special. They're just convenience.
 	coreBindings["empty"] = NewEmpty()
-	coreBindings["nil"] = NewNil()
+	coreBindings["void"] = NewVoid()
 	env := &Env{bindings: coreBindings, previous: nil}
 	return Engine{env}
 }

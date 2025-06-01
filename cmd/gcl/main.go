@@ -79,7 +79,7 @@ func repl(eng gcl.Engine) {
 			continue
 		}
 		// need to export isNil!
-		if !v.IsNil() {
+		if !v.IsVoid() {
 			fmt.Println(v.Display())
 		}
 	}
@@ -91,5 +91,5 @@ func bail() {
 
 func primitiveQuit(name string, args []gcl.Value) (gcl.Value, error) {
 	bail()
-	return gcl.NewNil(), nil
+	return gcl.NewVoid(), nil
 }

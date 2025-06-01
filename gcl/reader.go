@@ -49,6 +49,12 @@ func readSymbol(s string) (Value, string) {
 	if result == "" {
 		return nil, s
 	}
+	if result == "true" {
+		return &vBoolean{true}, rest
+	}
+	if result == "false" {
+		return &vBoolean{false}, rest
+	}
 	return &vSymbol{result}, rest
 }
 
@@ -71,19 +77,17 @@ func readInteger(s string) (Value, string) {
 	return &vInteger{num}, rest
 }
 
-func readBoolean(s string) (Value, string) {
-	// TODO: read all characters after # and then process
-	//       or treat # as a reader macro in some way?
-	result, rest := readToken(`#(?:t|T)`, s)
-	if result != "" {
-		return &vBoolean{true}, rest
-	}
-	result, rest = readToken(`#(?:f|F)`, s)
-	if result != "" {
-		return &vBoolean{false}, rest
-	}
-	return nil, s
-}
+// func readBoolean(s string) (Value, string) {
+// 	result, rest := readToken(`#(?:t|T)`, s)
+// 	if result != "" {
+// 		return &vBoolean{true}, rest
+// 	}
+// 	result, rest = readToken(`#(?:f|F)`, s)
+// 	if result != "" {
+// 		return &vBoolean{false}, rest
+// 	}
+// 	return nil, s
+// }
 
 func readList(s string) (Value, string, error) {
 	var current *vCons
@@ -116,15 +120,13 @@ func read(s string) (Value, string, error) {
 	if result != nil {
 		return result, rest, nil
 	}
+	// This also checks if we're pulling in special symbols
+	// like the Booleans true and false.
 	result, rest = readSymbol(s)
 	if result != nil {
 		return result, rest, nil
 	}
 	result, rest = readString(s)
-	if result != nil {
-		return result, rest, nil
-	}
-	result, rest = readBoolean(s)
 	if result != nil {
 		return result, rest, nil
 	}

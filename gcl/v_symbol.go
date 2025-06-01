@@ -64,7 +64,7 @@ func (v *vSymbol) IsTrue() bool {
 	return true
 }
 
-func (v *vSymbol) IsNil() bool {
+func (v *vSymbol) IsVoid() bool {
 	return false
 }
 

@@ -556,5 +556,5 @@ func makeDo(exprs []ast) ast {
 		}
 		return result
 	}
-	return &astLiteral{&vNil{}}
+	return &astLiteral{&vVoid{}}
 }

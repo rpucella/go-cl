@@ -63,7 +63,7 @@ func (v *vEmpty) IsTrue() bool {
 	return false
 }
 
-func (v *vEmpty) IsNil() bool {
+func (v *vEmpty) IsVoid() bool {
 	return false
 }
 

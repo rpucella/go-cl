@@ -64,7 +64,7 @@ func (v *vInteger) IsTrue() bool {
 	return v.val != 0
 }
 
-func (v *vInteger) IsNil() bool {
+func (v *vInteger) IsVoid() bool {
 	return false
 }
 

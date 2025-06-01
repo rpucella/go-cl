@@ -14,9 +14,9 @@ func NewBoolean(v bool) Value {
 
 func (v *vBoolean) Display() string {
 	if v.val {
-		return "#t"
+		return "true"
 	} else {
-		return "#f"
+		return "false"
 	}
 }
 
@@ -72,7 +72,7 @@ func (v *vBoolean) IsTrue() bool {
 	return v.val
 }
 
-func (v *vBoolean) IsNil() bool {
+func (v *vBoolean) IsVoid() bool {
 	return false
 }
 
