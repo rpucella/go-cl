@@ -119,7 +119,7 @@ func (e *astIf) evalPartial(env *Env) (*partialResult, error) {
 	if err != nil {
 		return nil, err
 	}
-	if c.isTrue() {
+	if c.IsTrue() {
 		return &partialResult{e.thn, env, nil}, nil
 	} else {
 		return &partialResult{e.els, env, nil}, nil
@@ -153,7 +153,7 @@ func (e *astApply) evalPartial(env *Env) (*partialResult, error) {
 		newEnv := layer(ff.env, ff.params, args)
 		return &partialResult{ff.body, newEnv, nil}, nil
 	}
-	v, err := f.apply(args)
+	v, err := f.Apply(args)
 	if err != nil {
 		return nil, err
 	}

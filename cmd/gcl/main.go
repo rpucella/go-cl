@@ -75,13 +75,13 @@ func repl(eng gcl.Engine) {
 		}
 		v, err := eng.Eval(sexp)
 		if err != nil {
-			fmt.Println(err.Error)
+			fmt.Println(err.Error())
 			continue
 		}
 		// need to export isNil!
-//		if !v.IsNil() {
+		if !v.IsNil() {
 			fmt.Println(v.Display())
-//		}
+		}
 	}
 }
 

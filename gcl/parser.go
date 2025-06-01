@@ -27,7 +27,7 @@ var fresh = (func(init int) func(string) string {
 })(0)
 
 func parseDef(sexp Value) (*astDef, error) {
-	head, next, ok := sexp.asCons()
+	head, next, ok := sexp.AsCons()
 	if !ok {
 		return nil, nil
 	}
@@ -35,13 +35,13 @@ func parseDef(sexp Value) (*astDef, error) {
 	if !isDef {
 		return nil, nil
 	}
-	defBlock, next, ok := next.asCons()
+	defBlock, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("too few arguments to def")
 	}
-	if name, ok := defBlock.asSymbol(); ok {
+	if name, ok := defBlock.AsSymbol(); ok {
 		// next = next.tailValue()
-		head, next, ok := next.asCons()
+		head, next, ok := next.AsCons()
 		if !ok {
 			return nil, errors.New("too few arguments to def")
 		}
@@ -49,13 +49,13 @@ func parseDef(sexp Value) (*astDef, error) {
 		if err != nil {
 			return nil, err
 		}
-		if !next.isEmpty() {
+		if !next.IsEmpty() {
 			return nil, errors.New("too many arguments to def")
 		}
 		return &astDef{name, DEF_VALUE, nil, value}, nil
 	}
-	if head, tail, ok := defBlock.asCons(); ok {
-		name, ok := head.asSymbol()
+	if head, tail, ok := defBlock.AsCons(); ok {
+		name, ok := head.AsSymbol()
 		if !ok {
 			return nil, errors.New("definition name not a symbol")
 		}
@@ -64,7 +64,7 @@ func parseDef(sexp Value) (*astDef, error) {
 			return nil, err
 		}
 		//next = next.tailValue()
-		head, next, ok := next.asCons()
+		head, next, ok := next.AsCons()
 		if !ok {
 			return nil, errors.New("too few arguments to def")
 		}
@@ -72,7 +72,7 @@ func parseDef(sexp Value) (*astDef, error) {
 		if err != nil {
 			return nil, err
 		}
-		if !next.isEmpty() {
+		if !next.IsEmpty() {
 			return nil, errors.New("too many arguments to def")
 		}
 		return &astDef{name, DEF_FUNCTION, params, body}, nil
@@ -121,17 +121,17 @@ func parseExpr(sexp Value) (ast, error) {
 }
 
 func parseAtom(sexp Value) ast {
-	if name, ok := sexp.asSymbol(); ok {
+	if name, ok := sexp.AsSymbol(); ok {
 		return &astId{name}
 	}
-	if sexp.isAtom() {
+	if sexp.IsAtom() {
 		return &astLiteral{sexp}
 	}
 	return nil
 }
 
 func parseKeyword(kw string, sexp Value) bool {
-	name, ok := sexp.asSymbol()
+	name, ok := sexp.AsSymbol()
 	if !ok {
 		return false
 	}
@@ -139,7 +139,7 @@ func parseKeyword(kw string, sexp Value) bool {
 }
 
 func parseastQuote(sexp Value) (ast, error) {
-	head, next, ok := sexp.asCons()
+	head, next, ok := sexp.AsCons()
 	if !ok {
 		return nil, nil
 	}
@@ -148,18 +148,18 @@ func parseastQuote(sexp Value) (ast, error) {
 		return nil, nil
 	}
 	//next := sexp.tailValue()
-	head1, next, ok := next.asCons()
+	head1, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("malformed quote")
 	}
-	if !next.isEmpty() {
+	if !next.IsEmpty() {
 		return nil, errors.New("too many arguments to quote")
 	}
 	return &astQuote{head1}, nil
 }
 
 func parseastIf(sexp Value) (ast, error) {
-	head, next, ok := sexp.asCons()
+	head, next, ok := sexp.AsCons()
 	if !ok {
 		return nil, nil
 	}
@@ -168,7 +168,7 @@ func parseastIf(sexp Value) (ast, error) {
 		return nil, nil
 	}
 	//next := sexp.tailValue()
-	head1, next, ok := next.asCons()
+	head1, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("too few arguments to if")
 	}
@@ -177,7 +177,7 @@ func parseastIf(sexp Value) (ast, error) {
 		return nil, err
 	}
 	//next = next.tailValue()
-	head2, next, ok := next.asCons()
+	head2, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("too few arguments to if")
 	}
@@ -186,7 +186,7 @@ func parseastIf(sexp Value) (ast, error) {
 		return nil, err
 	}
 	//next = next.tailValue()
-	head3, next, ok := next.asCons()
+	head3, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("too few arguments to if")
 	}
@@ -194,14 +194,14 @@ func parseastIf(sexp Value) (ast, error) {
 	if err != nil {
 		return nil, err
 	}
-	if !next.isEmpty() {
+	if !next.IsEmpty() {
 		return nil, errors.New("too many arguments to if")
 	}
 	return &astIf{cnd, thn, els}, nil
 }
 
 func parseFunction(sexp Value) (ast, error) {
-	head, next, ok := sexp.asCons()
+	head, next, ok := sexp.AsCons()
 	if !ok {
 		return nil, nil
 	}
@@ -210,11 +210,11 @@ func parseFunction(sexp Value) (ast, error) {
 		return nil, nil
 	}
 	//next := sexp.tailValue()
-	head1, next, ok := next.asCons()
+	head1, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("too few arguments to fun")
 	}
-	if _, ok := head1.asSymbol(); ok {
+	if _, ok := head1.AsSymbol(); ok {
 		// we need to parse as a recursive function
 		// restart from scratch
 		return parseRecFunction(sexp)
@@ -224,7 +224,7 @@ func parseFunction(sexp Value) (ast, error) {
 		return nil, err
 	}
 	//next = next.tailValue()
-	head2, next, ok := next.asCons()
+	head2, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("too few arguments to fun")
 	}
@@ -232,14 +232,14 @@ func parseFunction(sexp Value) (ast, error) {
 	if err != nil {
 		return nil, err
 	}
-	if !next.isEmpty() {
+	if !next.IsEmpty() {
 		return nil, errors.New("too many arguments to fun")
 	}
 	return makeFunction(params, body), nil
 }
 
 func parseRecFunction(sexp Value) (ast, error) {
-	head, next, ok := sexp.asCons()
+	head, next, ok := sexp.AsCons()
 	if !ok {
 		return nil, nil
 	}
@@ -248,14 +248,14 @@ func parseRecFunction(sexp Value) (ast, error) {
 		return nil, nil
 	}
 	//next := sexp.tailValue()
-	head1, next, ok := next.asCons()
+	head1, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("too few arguments to fun")
 	}
-	recName, _ := head1.asSymbol()
+	recName, _ := head1.AsSymbol()
 	// TODO: check type of recName? guess it was already done in parseFunction...
 	// next = next.tailValue()
-	head2, next, ok := next.asCons()
+	head2, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("too few arguments to fun")
 	}
@@ -264,7 +264,7 @@ func parseRecFunction(sexp Value) (ast, error) {
 		return nil, err
 	}
 	//next = next.tailValue()
-	head3, next, ok := next.asCons()
+	head3, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("too few arguments to fun")
 	}
@@ -272,14 +272,14 @@ func parseRecFunction(sexp Value) (ast, error) {
 	if err != nil {
 		return nil, err
 	}
-	if !next.isEmpty() {
+	if !next.IsEmpty() {
 		return nil, errors.New("too many arguments to fun")
 	}
 	return makeRecFunction(recName, params, body), nil
 }
 
 func parseLet(sexp Value) (ast, error) {
-	head, next, ok := sexp.asCons()
+	head, next, ok := sexp.AsCons()
 	if !ok {
 		return nil, nil
 	}
@@ -288,7 +288,7 @@ func parseLet(sexp Value) (ast, error) {
 		return nil, nil
 	}
 	//next := sexp.tailValue()
-	head1, next, ok := next.asCons()
+	head1, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("too few arguments to let")
 	}
@@ -297,7 +297,7 @@ func parseLet(sexp Value) (ast, error) {
 		return nil, err
 	}
 	//next = next.tailValue()
-	head2, next, ok := next.asCons()
+	head2, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("too few arguments to let")
 	}
@@ -305,14 +305,14 @@ func parseLet(sexp Value) (ast, error) {
 	if err != nil {
 		return nil, err
 	}
-	if !next.isEmpty() {
+	if !next.IsEmpty() {
 		return nil, errors.New("too many arguments to let")
 	}
 	return makeLet(params, bindings, body), nil
 }
 
 func parseLetStar(sexp Value) (ast, error) {
-	head, next, ok := sexp.asCons()
+	head, next, ok := sexp.AsCons()
 	if !ok {
 		return nil, nil
 	}
@@ -321,7 +321,7 @@ func parseLetStar(sexp Value) (ast, error) {
 		return nil, nil
 	}
 	//next := sexp.tailValue()
-	head1, next, ok := next.asCons()
+	head1, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("too few arguments to let*")
 	}
@@ -330,7 +330,7 @@ func parseLetStar(sexp Value) (ast, error) {
 		return nil, err
 	}
 	//next = next.tailValue()
-	head2, next, ok := next.asCons()
+	head2, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("too few arguments to let*")
 	}
@@ -338,14 +338,14 @@ func parseLetStar(sexp Value) (ast, error) {
 	if err != nil {
 		return nil, err
 	}
-	if !next.isEmpty() {
+	if !next.IsEmpty() {
 		return nil, errors.New("too many arguments to let*")
 	}
 	return makeLetStar(params, bindings, body), nil
 }
 
 func parseastLetRec(sexp Value) (ast, error) {
-	head, next, ok := sexp.asCons()
+	head, next, ok := sexp.AsCons()
 	if !ok {
 		return nil, nil
 	}
@@ -354,7 +354,7 @@ func parseastLetRec(sexp Value) (ast, error) {
 		return nil, nil
 	}
 	//next := sexp.tailValue()
-	head1, next, ok := next.asCons()
+	head1, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("too few arguments to letrec")
 	}
@@ -363,7 +363,7 @@ func parseastLetRec(sexp Value) (ast, error) {
 		return nil, err
 	}
 	//next = next.tailValue()
-	head2, next, ok := next.asCons()
+	head2, next, ok := next.AsCons()
 	if !ok {
 		return nil, errors.New("too few arguments to letrec")
 	}
@@ -371,7 +371,7 @@ func parseastLetRec(sexp Value) (ast, error) {
 	if err != nil {
 		return nil, err
 	}
-	if !next.isEmpty() {
+	if !next.IsEmpty() {
 		return nil, errors.New("too many arguments to letrec")
 	}
 	return &astLetRec{names, params, bodies, body}, nil
@@ -381,21 +381,21 @@ func parseBindings(sexp Value) ([]string, []ast, error) {
 	params := make([]string, 0)
 	bindings := make([]ast, 0)
 	current := sexp
-	for head, next, ok := sexp.asCons(); ok; head, next, ok = next.asCons() {
-		headB, nextB, ok := head.asCons()
+	for head, next, ok := sexp.AsCons(); ok; head, next, ok = next.AsCons() {
+		headB, nextB, ok := head.AsCons()
 		if !ok {
 			return nil, nil, errors.New("expected binding (name expr)")
 		}
-		name, ok := headB.asSymbol()
+		name, ok := headB.AsSymbol()
 		if !ok {
 			return nil, nil, errors.New("expected name in binding")
 		}
 		params = append(params, name)
-		headB2, nextB, ok := nextB.asCons()
+		headB2, nextB, ok := nextB.AsCons()
 		if !ok {
 			return nil, nil, errors.New("expected expr in binding")
 		}
-		if !nextB.isEmpty() {
+		if !nextB.IsEmpty() {
 			return nil, nil, errors.New("too many elements in binding")
 		}
 		binding, err := parseExpr(headB2)
@@ -405,7 +405,7 @@ func parseBindings(sexp Value) ([]string, []ast, error) {
 		bindings = append(bindings, binding)
 		current = next
 	}
-	if !current.isEmpty() {
+	if !current.IsEmpty() {
 		return nil, nil, errors.New("malformed binding list")
 	}
 	return params, bindings, nil
@@ -416,17 +416,17 @@ func parseFunBindings(sexp Value) ([]string, [][]string, []ast, error) {
 	params := make([][]string, 0)
 	bodies := make([]ast, 0)
 	current := sexp
-	for head, next, ok := sexp.asCons(); ok; head, next, ok = next.asCons() {
-		headB, nextB, ok := head.asCons()
+	for head, next, ok := sexp.AsCons(); ok; head, next, ok = next.AsCons() {
+		headB, nextB, ok := head.AsCons()
 		if !ok {
 			return nil, nil, nil, errors.New("expected binding (name params expr)")
 		}
-		name, ok := headB.asSymbol()
+		name, ok := headB.AsSymbol()
 		if !ok {
 			return nil, nil, nil, errors.New("expected name in binding")
 		}
 		names = append(names, name)
-		headB2, nextB, ok := nextB.asCons()
+		headB2, nextB, ok := nextB.AsCons()
 		if !ok {
 			return nil, nil, nil, errors.New("expected params in binding")
 		}
@@ -435,11 +435,11 @@ func parseFunBindings(sexp Value) ([]string, [][]string, []ast, error) {
 			return nil, nil, nil, err
 		}
 		params = append(params, these_params)
-		headB3, nextB, ok := nextB.asCons()
+		headB3, nextB, ok := nextB.AsCons()
 		if !ok {
 			return nil, nil, nil, errors.New("expected expr in binding")
 		}
-		if !nextB.isEmpty() {
+		if !nextB.IsEmpty() {
 			return nil, nil, nil, errors.New("too many elements in binding")
 		}
 		body, err := parseExpr(headB3)
@@ -449,7 +449,7 @@ func parseFunBindings(sexp Value) ([]string, [][]string, []ast, error) {
 		bodies = append(bodies, body)
 		current = next
 	}
-	if !current.isEmpty() {
+	if !current.IsEmpty() {
 		return nil, nil, nil, errors.New("malformed binding list")
 	}
 	return names, params, bodies, nil
@@ -477,7 +477,7 @@ func makeRecFunction(recName string, params []string, body ast) ast {
 }
 
 func parseastApply(sexp Value) (ast, error) {
-	head, next, ok := sexp.asCons()
+	head, next, ok := sexp.AsCons()
 	if !ok {
 		return nil, nil
 	}
@@ -498,7 +498,7 @@ func parseastApply(sexp Value) (ast, error) {
 func parseExprs(sexp Value) ([]ast, error) {
 	args := make([]ast, 0)
 	current := sexp
-	for head, next, ok := sexp.asCons(); ok; head, next, ok = next.asCons() {
+	for head, next, ok := sexp.AsCons(); ok; head, next, ok = next.AsCons() {
 		curr, err := parseExpr(head)
 		if err != nil {
 			return nil, err
@@ -509,7 +509,7 @@ func parseExprs(sexp Value) ([]ast, error) {
 		args = append(args, curr)
 		current = next
 	}
-	if !current.isEmpty() {
+	if !current.IsEmpty() {
 		return nil, errors.New("malformed expression list")
 	}
 	return args, nil
@@ -518,22 +518,22 @@ func parseExprs(sexp Value) ([]ast, error) {
 func parseSymbols(sexp Value) ([]string, error) {
 	params := make([]string, 0)
 	current := sexp
-	for head, next, ok := sexp.asCons(); ok; head, next, ok = next.asCons() {
-		name, ok := head.asSymbol()
+	for head, next, ok := sexp.AsCons(); ok; head, next, ok = next.AsCons() {
+		name, ok := head.AsSymbol()
 		if !ok {
 			return nil, errors.New("expected symbol in list")
 		}
 		params = append(params, name)
 		current = next
 	}
-	if !current.isEmpty() {
+	if !current.IsEmpty() {
 		return nil, errors.New("malformed symbol list")
 	}
 	return params, nil
 }
 
 func parseDo(sexp Value) (ast, error) {
-	head, next, ok := sexp.asCons()
+	head, next, ok := sexp.AsCons()
 	if !ok {
 		return nil, nil
 	}

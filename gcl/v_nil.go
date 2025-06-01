@@ -12,15 +12,15 @@ func NewNil() Value {
 }
 
 func (v *vNil) Display() string {
-	// figure out if this is the right thing?
+	// figure out if this Is the right thing?
 	return "#nil"
 }
 
-func (v *vNil) DisplayCDR() string {
+func (v *vNil) displayCDR() string {
 	panic(fmt.Sprintf("unchecked access to %s", v.str()))
 }
 
-func (v *vNil) apply(args []Value) (Value, error) {
+func (v *vNil) Apply(args []Value) (Value, error) {
 	return nil, fmt.Errorf("Value %s not applicable", v.str())
 }
 
@@ -28,86 +28,78 @@ func (v *vNil) str() string {
 	return fmt.Sprintf("VNil")
 }
 
-func (v *vNil) isAtom() bool {
+func (v *vNil) IsAtom() bool {
 	return false
 }
 
-func (v *vNil) isSymbol() bool {
+func (v *vNil) IsSymbol() bool {
 	return false
 }
 
-func (v *vNil) isCons() bool {
+func (v *vNil) IsCons() bool {
 	return false
 }
 
-func (v *vNil) isEmpty() bool {
+func (v *vNil) IsEmpty() bool {
 	return false
 }
 
-func (v *vNil) isNumber() bool {
+func (v *vNil) IsNumber() bool {
 	return false
 }
 
-func (v *vNil) isBool() bool {
+func (v *vNil) IsBool() bool {
 	return false
 }
 
-func (v *vNil) isString() bool {
+func (v *vNil) IsString() bool {
 	return false
 }
 
-func (v *vNil) isFunction() bool {
+func (v *vNil) IsFunction() bool {
 	return false
 }
 
-func (v *vNil) isTrue() bool {
+func (v *vNil) IsTrue() bool {
 	return false
 }
 
-func (v *vNil) isNil() bool {
+func (v *vNil) IsNil() bool {
 	return true
 }
 
-func (v *vNil) isEqual(vv Value) bool {
-	return vv.isNil()
+func (v *vNil) IsEqual(vv Value) bool {
+	return vv.IsNil()
 }
 
-func (v *vNil) typ() string {
+func (v *vNil) Type() string {
 	return "nil"
 }
 
-func (v *vNil) asInteger() (int, bool) {
+func (v *vNil) AsInteger() (int, bool) {
 	return 0, false
 }
 
-func (v *vNil) asBoolean() (bool, bool) {
+func (v *vNil) AsBoolean() (bool, bool) {
 	return false, false
 }
 
-func (v *vNil) asString() (string, bool) {
+func (v *vNil) AsString() (string, bool) {
 	return "", false
 }
 
-func (v *vNil) asSymbol() (string, bool) {
+func (v *vNil) AsSymbol() (string, bool) {
 	return "", false
 }
 
-func (v *vNil) asCons() (Value, Value, bool) {
+func (v *vNil) AsCons() (Value, Value, bool) {
 	return nil, nil, false
 }
 
-func (v *vNil) asReference() (Value, func(Value), bool) {
+func (v *vNil) AsReference() (Value, func(Value), bool) {
 	return nil, nil, false
 }
 
-func (v *vNil) setReference(Value) bool {
+func (v *vNil) SetReference(Value) bool {
 	return false
-}
-
-func (v *vNil) asArray() ([]Value, bool) {
-	return nil, false
-}
-
-func (v *vNil) asDict() (map[string]Value, bool) {
-	return nil, false
 }

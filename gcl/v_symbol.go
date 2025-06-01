@@ -16,11 +16,11 @@ func (v *vSymbol) Display() string {
 	return v.name
 }
 
-func (v *vSymbol) DisplayCDR() string {
+func (v *vSymbol) displayCDR() string {
 	panic(fmt.Sprintf("unchecked access to %s", v.str()))
 }
 
-func (v *vSymbol) apply(args []Value) (Value, error) {
+func (v *vSymbol) Apply(args []Value) (Value, error) {
 	return nil, fmt.Errorf("Value %s not applicable", v.str())
 }
 
@@ -28,87 +28,79 @@ func (v *vSymbol) str() string {
 	return fmt.Sprintf("VSymbol[%s]", v.name)
 }
 
-func (v *vSymbol) isAtom() bool {
+func (v *vSymbol) IsAtom() bool {
 	return true
 }
 
-func (v *vSymbol) isSymbol() bool {
+func (v *vSymbol) IsSymbol() bool {
 	return true
 }
 
-func (v *vSymbol) isCons() bool {
+func (v *vSymbol) IsCons() bool {
 	return false
 }
 
-func (v *vSymbol) isEmpty() bool {
+func (v *vSymbol) IsEmpty() bool {
 	return false
 }
 
-func (v *vSymbol) isNumber() bool {
+func (v *vSymbol) IsNumber() bool {
 	return false
 }
 
-func (v *vSymbol) isBool() bool {
+func (v *vSymbol) IsBool() bool {
 	return false
 }
 
-func (v *vSymbol) isString() bool {
+func (v *vSymbol) IsString() bool {
 	return false
 }
 
-func (v *vSymbol) isFunction() bool {
+func (v *vSymbol) IsFunction() bool {
 	return false
 }
 
-func (v *vSymbol) isTrue() bool {
+func (v *vSymbol) IsTrue() bool {
 	return true
 }
 
-func (v *vSymbol) isNil() bool {
+func (v *vSymbol) IsNil() bool {
 	return false
 }
 
-func (v *vSymbol) isEqual(vv Value) bool {
-	name, ok := vv.asSymbol()
+func (v *vSymbol) IsEqual(vv Value) bool {
+	name, ok := vv.AsSymbol()
 	return ok && v.name == name
 }
 
-func (v *vSymbol) typ() string {
+func (v *vSymbol) Type() string {
 	return "symbol"
 }
 
-func (v *vSymbol) asInteger() (int, bool) {
+func (v *vSymbol) AsInteger() (int, bool) {
 	return 0, false
 }
 
-func (v *vSymbol) asBoolean() (bool, bool) {
+func (v *vSymbol) AsBoolean() (bool, bool) {
 	return false, false
 }
 
-func (v *vSymbol) asString() (string, bool) {
+func (v *vSymbol) AsString() (string, bool) {
 	return "", false
 }
 
-func (v *vSymbol) asSymbol() (string, bool) {
+func (v *vSymbol) AsSymbol() (string, bool) {
 	return v.name, true
 }
 
-func (v *vSymbol) asCons() (Value, Value, bool) {
+func (v *vSymbol) AsCons() (Value, Value, bool) {
 	return nil, nil, false
 }
 
-func (v *vSymbol) asReference() (Value, func(Value), bool) {
+func (v *vSymbol) AsReference() (Value, func(Value), bool) {
 	return nil, nil, false
 }
 
-func (v *vSymbol) setReference(Value) bool {
+func (v *vSymbol) SetReference(Value) bool {
 	return false
-}
-
-func (v *vSymbol) asArray() ([]Value, bool) {
-	return nil, false
-}
-
-func (v *vSymbol) asDict() (map[string]Value, bool) {
-	return nil, false
 }

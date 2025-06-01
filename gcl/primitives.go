@@ -12,7 +12,7 @@ type Primitive struct {
 
 func listLength(v Value) int {
 	result := 0
-	for _, next, ok := v.asCons(); ok; _, next, ok = next.asCons() {
+	for _, next, ok := v.AsCons(); ok; _, next, ok = next.AsCons() {
 		result += 1
 	}
 	return result
@@ -21,7 +21,7 @@ func listLength(v Value) int {
 func listAppend(v1 Value, v2 Value) Value {
 	var result Value = nil
 	var current_result MutableCons = nil
-	for head, next, ok := v1.asCons(); ok; head, next, ok = next.asCons() {
+	for head, next, ok := v1.AsCons(); ok; head, next, ok = next.AsCons() {
 		cell := NewMutableCons(head, nil)
 		if current_result == nil {
 			result = cell
@@ -39,7 +39,7 @@ func listAppend(v1 Value, v2 Value) Value {
 
 func allConses(vs []Value) bool {
 	for _, v := range vs {
-		if _, _, ok := v.asCons(); !ok {
+		if _, _, ok := v.AsCons(); !ok {
 			return false
 		}
 	}
@@ -71,14 +71,14 @@ func MakePrimitive(d Primitive) func([]Value) (Value, error) {
 
 func checkArgType(name string, arg Value, pred func(Value) bool) error {
 	if !pred(arg) {
-		return fmt.Errorf("%s - wrong argument type %s", name, arg.typ())
+		return fmt.Errorf("%s - wrong argument type %s", name, arg.Type())
 	}
 	return nil
 }
 
 func checkArgTypeB(name string, arg Value, ok bool) error {
 	if !ok {
-		return fmt.Errorf("%s - wrong argument type %s", name, arg.typ())
+		return fmt.Errorf("%s - wrong argument type %s", name, arg.Type())
 	}
 	return nil
 }
@@ -105,24 +105,24 @@ func checkExactArgs(name string, args []Value, n int) error {
 }
 
 func isInt(v Value) bool {
-	_, ok := v.asInteger()
+	_, ok := v.AsInteger()
 	return ok
 }
 
 func isString(v Value) bool {
-	_, ok := v.asString()
+	_, ok := v.AsString()
 	return ok
 }
 
 func isFunction(v Value) bool {
-	return v.isFunction()
+	return v.IsFunction()
 }
 
 func isList(v Value) bool {
-	if _, _, ok := v.asCons(); ok {
+	if _, _, ok := v.AsCons(); ok {
 		return true
 	}
-	return v.isEmpty()
+	return v.IsEmpty()
 }
 
 func mkNumPredicate(pred func(int, int) bool) func(string, []Value) (Value, error) {
@@ -130,11 +130,11 @@ func mkNumPredicate(pred func(int, int) bool) func(string, []Value) (Value, erro
 		if err := checkExactArgs(name, args, 2); err != nil {
 			return nil, err
 		}
-		i1, ok := args[0].asInteger()
+		i1, ok := args[0].AsInteger()
 		if err := checkArgTypeB(name, args[0], ok); err != nil {
 			return nil, err
 		}
-		i2, ok := args[1].asInteger()
+		i2, ok := args[1].AsInteger()
 		if err := checkArgTypeB(name, args[1], ok); err != nil {
 			return nil, err
 		}
@@ -147,7 +147,7 @@ var primList = []Primitive{
 	Primitive{
 		"type", 1, 1,
 		func(name string, args []Value) (Value, error) {
-			return NewSymbol(args[0].typ()), nil
+			return NewSymbol(args[0].Type()), nil
 		},
 	},
 
@@ -156,7 +156,7 @@ var primList = []Primitive{
 		func(name string, args []Value) (Value, error) {
 			v := 0
 			for _, arg := range args {
-				i1, ok := arg.asInteger()
+				i1, ok := arg.AsInteger()
 				if err := checkArgTypeB(name, arg, ok); err != nil {
 					return nil, err
 				}
@@ -171,7 +171,7 @@ var primList = []Primitive{
 		func(name string, args []Value) (Value, error) {
 			v := 1
 			for _, arg := range args {
-				i1, ok := arg.asInteger()
+				i1, ok := arg.AsInteger()
 				if err := checkArgTypeB(name, arg, ok); err != nil {
 					return nil, err
 				}
@@ -184,13 +184,13 @@ var primList = []Primitive{
 	Primitive{
 		"-", 1, -1,
 		func(name string, args []Value) (Value, error) {
-			v, ok := args[0].asInteger()
+			v, ok := args[0].AsInteger()
 			if err := checkArgTypeB(name, args[0], ok); err != nil {
 				return nil, err
 			}
 			if len(args) > 1 {
 				for _, arg := range args[1:] {
-					i1, ok := arg.asInteger()
+					i1, ok := arg.AsInteger()
 					if err := checkArgTypeB(name, arg, ok); err != nil {
 						return nil, err
 					}
@@ -207,7 +207,7 @@ var primList = []Primitive{
 		func(name string, args []Value) (Value, error) {
 			var reference Value = args[0]
 			for _, v := range args[1:] {
-				if !reference.isEqual(v) {
+				if !reference.IsEqual(v) {
 					return NewBoolean(false), nil
 				}
 			}
@@ -233,7 +233,7 @@ var primList = []Primitive{
 
 	Primitive{"not", 1, 1,
 		func(name string, args []Value) (Value, error) {
-			return NewBoolean(!args[0].isTrue()), nil
+			return NewBoolean(!args[0].IsTrue()), nil
 		},
 	},
 
@@ -242,7 +242,7 @@ var primList = []Primitive{
 		func(name string, args []Value) (Value, error) {
 			v := ""
 			for _, arg := range args {
-				str, ok := arg.asString()
+				str, ok := arg.AsString()
 				if err := checkArgTypeB(name, arg, ok); err != nil {
 					return nil, err
 				}
@@ -254,7 +254,7 @@ var primList = []Primitive{
 
 	Primitive{"string-length", 1, 1,
 		func(name string, args []Value) (Value, error) {
-			str, ok := args[0].asString()
+			str, ok := args[0].AsString()
 			if err := checkArgTypeB(name, args[0], ok); err != nil {
 				return nil, err
 			}
@@ -264,7 +264,7 @@ var primList = []Primitive{
 
 	Primitive{"string-lower", 1, 1,
 		func(name string, args []Value) (Value, error) {
-			str, ok := args[0].asString()
+			str, ok := args[0].AsString()
 			if err := checkArgTypeB(name, args[0], ok); err != nil {
 				return nil, err
 			}
@@ -274,7 +274,7 @@ var primList = []Primitive{
 
 	Primitive{"string-upper", 1, 1,
 		func(name string, args []Value) (Value, error) {
-			str, ok := args[0].asString()
+			str, ok := args[0].AsString()
 			if err := checkArgTypeB(name, args[0], ok); err != nil {
 				return nil, err
 			}
@@ -284,21 +284,21 @@ var primList = []Primitive{
 
 	Primitive{"string-substring", 1, 3,
 		func(name string, args []Value) (Value, error) {
-			str, ok := args[0].asString()
+			str, ok := args[0].AsString()
 			if err := checkArgTypeB(name, args[0], ok); err != nil {
 				return nil, err
 			}
 			start := 0
 			end := len(str)
 			if len(args) > 2 {
-				i1, ok := args[2].asInteger()
+				i1, ok := args[2].AsInteger()
 				if err := checkArgTypeB(name, args[2], ok); err != nil {
 					return nil, err
 				}
 				end = min(i1, end)
 			}
 			if len(args) > 1 {
-				i1, ok := args[1].asInteger()
+				i1, ok := args[1].AsInteger()
 				if err := checkArgTypeB(name, args[1], ok); err != nil {
 					return nil, err
 				}
@@ -323,14 +323,14 @@ var primList = []Primitive{
 			arguments := make([]Value, listLength(args[1]))
 			current := args[1]
 			for i := range arguments {
-				head, tail, _ := current.asCons() // isList before checked ok.
+				head, tail, _ := current.AsCons() // isList before checked ok.
 				arguments[i] = head
 				current = tail
 			}
-			if !current.isEmpty() {
+			if !current.IsEmpty() {
 				return nil, fmt.Errorf("%s - malformed list", name)
 			}
-			return args[0].apply(arguments)
+			return args[0].Apply(arguments)
 		},
 	},
 
@@ -370,11 +370,11 @@ var primList = []Primitive{
 			}
 			var result Value = NewEmpty()
 			current := args[0]
-			for head, next, ok := args[0].asCons(); ok; head, next, ok = next.asCons() {
+			for head, next, ok := args[0].AsCons(); ok; head, next, ok = next.AsCons() {
 				result = NewCons(head, result)
 				current = next
 			}
-			if !current.isEmpty() {
+			if !current.IsEmpty() {
 				return nil, fmt.Errorf("%s - malformed list", name)
 			}
 			return result, nil
@@ -386,10 +386,10 @@ var primList = []Primitive{
 			if err := checkArgType(name, args[0], isList); err != nil {
 				return nil, err
 			}
-			if args[0].isEmpty() {
+			if args[0].IsEmpty() {
 				return nil, fmt.Errorf("%s - empty list argument", name)
 			}
-			head, _, _ := args[0].asCons()
+			head, _, _ := args[0].AsCons()
 			return head, nil
 		},
 	},
@@ -399,10 +399,10 @@ var primList = []Primitive{
 			if err := checkArgType(name, args[0], isList); err != nil {
 				return nil, err
 			}
-			if args[0].isEmpty() {
+			if args[0].IsEmpty() {
 				return nil, fmt.Errorf("%s - empty list argument", name)
 			}
-			_, tail, _ := args[0].asCons()
+			_, tail, _ := args[0].AsCons()
 			return tail, nil
 		},
 	},
@@ -424,11 +424,11 @@ var primList = []Primitive{
 			}
 			count := 0
 			current := args[0]
-			for _, next, ok := args[0].asCons(); ok; _, next, ok = next.asCons() {
+			for _, next, ok := args[0].AsCons(); ok; _, next, ok = next.AsCons() {
 				count += 1
 				current = next
 			}
-			if !current.isEmpty() {
+			if !current.IsEmpty() {
 				return nil, fmt.Errorf("%s - malformed list", name)
 			}
 			return NewInteger(count), nil
@@ -440,12 +440,12 @@ var primList = []Primitive{
 			if err := checkArgType(name, args[0], isList); err != nil {
 				return nil, err
 			}
-			idx, ok := args[1].asInteger()
+			idx, ok := args[1].AsInteger()
 			if err := checkArgTypeB(name, args[1], ok); err != nil {
 				return nil, err
 			}
 			if idx >= 0 {
-				for head, next, ok := args[0].asCons(); ok; head, next, ok = next.asCons() {
+				for head, next, ok := args[0].AsCons(); ok; head, next, ok = next.AsCons() {
 					if idx == 0 {
 						return head, nil
 					} else {
@@ -476,10 +476,10 @@ var primList = []Primitive{
 			}
 			for allConses(currents) {
 				for i := range currents {
-					head, _, _ := currents[i].asCons()
+					head, _, _ := currents[i].AsCons()
 					firsts[i] = head
 				}
-				v, err := args[0].apply(firsts)
+				v, err := args[0].Apply(firsts)
 				if err != nil {
 					return nil, err
 				}
@@ -491,7 +491,7 @@ var primList = []Primitive{
 				}
 				current_result = cell
 				for i := range currents {
-					_, tail, _ := currents[i].asCons()
+					_, tail, _ := currents[i].AsCons()
 					currents[i] = tail
 				}
 			}
@@ -521,15 +521,15 @@ var primList = []Primitive{
 			}
 			for allConses(currents) {
 				for i := range currents {
-					head, _, _ := currents[i].asCons()
+					head, _, _ := currents[i].AsCons()
 					firsts[i] = head
 				}
-				_, err := args[0].apply(firsts)
+				_, err := args[0].Apply(firsts)
 				if err != nil {
 					return nil, err
 				}
 				for i := range currents {
-					_, tail, _ := currents[i].asCons()
+					_, tail, _ := currents[i].AsCons()
 					currents[i] = tail
 				}
 			}
@@ -548,12 +548,12 @@ var primList = []Primitive{
 			var result Value = nil
 			var current_result MutableCons = nil
 			current := args[1]
-			for head, next, ok := args[1].asCons(); ok; head, next, ok = next.asCons() {
-				v, err := args[0].apply([]Value{head})
+			for head, next, ok := args[1].AsCons(); ok; head, next, ok = next.AsCons() {
+				v, err := args[0].Apply([]Value{head})
 				if err != nil {
 					return nil, err
 				}
-				if v.isTrue() {
+				if v.IsTrue() {
 					cell := NewMutableCons(head, nil)
 					if current_result == nil {
 						result = cell
@@ -564,7 +564,7 @@ var primList = []Primitive{
 				}
 				current = next
 			}
-			if !current.isEmpty() {
+			if !current.IsEmpty() {
 				return nil, fmt.Errorf("%s - malformed list", name)
 			}
 			if current_result == nil {
@@ -586,25 +586,25 @@ var primList = []Primitive{
 			var temp Value = NewEmpty()
 			// first reverse the list
 			current := args[1]
-			for head, next, ok := args[1].asCons(); ok; head, next, ok = next.asCons() {
+			for head, next, ok := args[1].AsCons(); ok; head, next, ok = next.AsCons() {
 				temp = NewCons(head, temp)
 				current = next
 			}
-			if !current.isEmpty() {
+			if !current.IsEmpty() {
 				return nil, fmt.Errorf("%s - malformed list", name)
 			}
 			// then fold it
 			result := args[2]
 			current = temp
-			for head, next, ok := temp.asCons(); ok; head, next, ok = next.asCons() {
-				v, err := args[0].apply([]Value{head, result})
+			for head, next, ok := temp.AsCons(); ok; head, next, ok = next.AsCons() {
+				v, err := args[0].Apply([]Value{head, result})
 				if err != nil {
 					return nil, err
 				}
 				result = v
 				current = next
 			}
-			if !current.isEmpty() {
+			if !current.IsEmpty() {
 				return nil, fmt.Errorf("%s - malformed list", name)
 			}
 			return result, nil
@@ -621,15 +621,15 @@ var primList = []Primitive{
 			}
 			result := args[2]
 			current := args[1]
-			for head, next, ok := args[1].asCons(); ok; head, next, ok = next.asCons() {
-				v, err := args[0].apply([]Value{result, head})
+			for head, next, ok := args[1].AsCons(); ok; head, next, ok = next.AsCons() {
+				v, err := args[0].Apply([]Value{result, head})
 				if err != nil {
 					return nil, err
 				}
 				result = v
 				current = next
 			}
-			if !current.isEmpty() {
+			if !current.IsEmpty() {
 				return nil, fmt.Errorf("%s - malformed list", name)
 			}
 			return result, nil
@@ -644,13 +644,13 @@ var primList = []Primitive{
 
 	Primitive{"empty?", 1, 1,
 		func(name string, args []Value) (Value, error) {
-			return NewBoolean(args[0].isEmpty()), nil
+			return NewBoolean(args[0].IsEmpty()), nil
 		},
 	},
 
 	Primitive{"cons?", 1, 1,
 		func(name string, args []Value) (Value, error) {
-			_, _, ok := args[0].asCons()
+			_, _, ok := args[0].AsCons()
 			return NewBoolean(ok), nil
 		},
 	},
@@ -658,10 +658,10 @@ var primList = []Primitive{
 	Primitive{"list?", 1, 1,
 		func(name string, args []Value) (Value, error) {
 			result := false
-			if _, _, ok := args[0].asCons(); ok {
+			if _, _, ok := args[0].AsCons(); ok {
 				result = true
 			} else {
-				result = args[0].isEmpty()
+				result = args[0].IsEmpty()
 			}
 			return NewBoolean(result), nil
 		},
@@ -669,48 +669,48 @@ var primList = []Primitive{
 
 	Primitive{"number?", 1, 1,
 		func(name string, args []Value) (Value, error) {
-			_, ok := args[0].asInteger()
+			_, ok := args[0].AsInteger()
 			return NewBoolean(ok), nil
 		},
 	},
 
 	Primitive{"ref?", 1, 1,
 		func(name string, args []Value) (Value, error) {
-			_, _, ok := args[0].asReference()
+			_, _, ok := args[0].AsReference()
 			return NewBoolean(ok), nil
 		},
 	},
 
 	Primitive{"boolean?", 1, 1,
 		func(name string, args []Value) (Value, error) {
-			_, ok := args[0].asBoolean()
+			_, ok := args[0].AsBoolean()
 			return NewBoolean(ok), nil
 		},
 	},
 
 	Primitive{"string?", 1, 1,
 		func(name string, args []Value) (Value, error) {
-			_, ok := args[0].asString()
+			_, ok := args[0].AsString()
 			return NewBoolean(ok), nil
 		},
 	},
 
 	Primitive{"symbol?", 1, 1,
 		func(name string, args []Value) (Value, error) {
-			_, ok := args[0].asSymbol()
+			_, ok := args[0].AsSymbol()
 			return NewBoolean(ok), nil
 		},
 	},
 
 	Primitive{"function?", 1, 1,
 		func(name string, args []Value) (Value, error) {
-			return NewBoolean(args[0].isFunction()), nil
+			return NewBoolean(args[0].IsFunction()), nil
 		},
 	},
 
 	Primitive{"nil?", 1, 1,
 		func(name string, args []Value) (Value, error) {
-			return NewBoolean(args[0].isNil()), nil
+			return NewBoolean(args[0].IsNil()), nil
 		},
 	},
 }

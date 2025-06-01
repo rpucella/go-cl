@@ -15,11 +15,11 @@ func (v *vEmpty) Display() string {
 	return "()"
 }
 
-func (v *vEmpty) DisplayCDR() string {
+func (v *vEmpty) displayCDR() string {
 	return ")"
 }
 
-func (v *vEmpty) apply(args []Value) (Value, error) {
+func (v *vEmpty) Apply(args []Value) (Value, error) {
 	return nil, fmt.Errorf("Value %s not applicable", v.str())
 }
 
@@ -27,86 +27,78 @@ func (v *vEmpty) str() string {
 	return fmt.Sprintf("VEmpty")
 }
 
-func (v *vEmpty) isAtom() bool {
+func (v *vEmpty) IsAtom() bool {
 	return false
 }
 
-func (v *vEmpty) isSymbol() bool {
+func (v *vEmpty) IsSymbol() bool {
 	return false
 }
 
-func (v *vEmpty) isCons() bool {
+func (v *vEmpty) IsCons() bool {
 	return false
 }
 
-func (v *vEmpty) isEmpty() bool {
+func (v *vEmpty) IsEmpty() bool {
 	return true
 }
 
-func (v *vEmpty) isNumber() bool {
+func (v *vEmpty) IsNumber() bool {
 	return false
 }
 
-func (v *vEmpty) isBool() bool {
+func (v *vEmpty) IsBool() bool {
 	return false
 }
 
-func (v *vEmpty) isString() bool {
+func (v *vEmpty) IsString() bool {
 	return false
 }
 
-func (v *vEmpty) isFunction() bool {
+func (v *vEmpty) IsFunction() bool {
 	return false
 }
 
-func (v *vEmpty) isTrue() bool {
+func (v *vEmpty) IsTrue() bool {
 	return false
 }
 
-func (v *vEmpty) isNil() bool {
+func (v *vEmpty) IsNil() bool {
 	return false
 }
 
-func (v *vEmpty) isEqual(vv Value) bool {
-	return vv.isEmpty()
+func (v *vEmpty) IsEqual(vv Value) bool {
+	return vv.IsEmpty()
 }
 
-func (v *vEmpty) typ() string {
+func (v *vEmpty) Type() string {
 	return "list"
 }
 
-func (v *vEmpty) asInteger() (int, bool) {
+func (v *vEmpty) AsInteger() (int, bool) {
 	return 0, false
 }
 
-func (v *vEmpty) asBoolean() (bool, bool) {
+func (v *vEmpty) AsBoolean() (bool, bool) {
 	return false, false
 }
 
-func (v *vEmpty) asString() (string, bool) {
+func (v *vEmpty) AsString() (string, bool) {
 	return "", false
 }
 
-func (v *vEmpty) asSymbol() (string, bool) {
+func (v *vEmpty) AsSymbol() (string, bool) {
 	return "", false
 }
 
-func (v *vEmpty) asCons() (Value, Value, bool) {
+func (v *vEmpty) AsCons() (Value, Value, bool) {
 	return nil, nil, false
 }
 
-func (v *vEmpty) asReference() (Value, func(Value), bool) {
+func (v *vEmpty) AsReference() (Value, func(Value), bool) {
 	return nil, nil, false
 }
 
-func (v *vEmpty) setReference(Value) bool {
+func (v *vEmpty) SetReference(Value) bool {
 	return false
-}
-
-func (v *vEmpty) asArray() ([]Value, bool) {
-	return nil, false
-}
-
-func (v *vEmpty) asDict() (map[string]Value, bool) {
-	return nil, false
 }

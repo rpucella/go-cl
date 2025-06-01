@@ -12,6 +12,8 @@ func NewEngine() Engine {
 	coreBindings := corePrimitives()
 	coreBindings["true"] = NewBoolean(true)
 	coreBindings["false"] = NewBoolean(false)
+	coreBindings["empty"] = NewEmpty()
+	coreBindings["nil"] = NewNil()
 	env := &Env{bindings: coreBindings, previous: nil}
 	return Engine{env}
 }
@@ -69,7 +71,7 @@ func (e Engine) ProcessDeclaration(v Value) (string, error) {
 		if d.typ == DEF_VALUE {
 			v, err := d.body.eval(e.env)
 			if err != nil {
-				fmt.Println("EVAL ERROR -", err.Error())
+				return "", fmt.Errorf("EVAL ERROR - %w", err)
 			}
 			update(e.env, d.name, v)
 			return d.name, nil
@@ -88,12 +90,12 @@ func (e Engine) Eval(sexpr Value) (Value, error) {
 	expr, err := parseExpr(sexpr)
 	if err != nil {
 		fmt.Println()
-		return nil, fmt.Errorf("PARSE ERROR - %w", err.Error())
+		return nil, fmt.Errorf("PARSE ERROR - %w", err)
 	}
 	///fmt.Println("expr =", e.str())
 	v, err := expr.eval(e.env)
 	if err != nil {
-		return nil, fmt.Errorf("EVAL ERROR - %w", err.Error())
+		return nil, fmt.Errorf("EVAL ERROR - %w", err)
 	}
 	return v, nil
 }

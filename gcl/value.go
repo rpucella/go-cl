@@ -2,24 +2,26 @@ package gcl
 
 type Value interface {
 	Display() string
-	DisplayCDR() string
 
-	asInteger() (int, bool)
-	asBoolean() (bool, bool)
-	asString() (string, bool)
-	asSymbol() (string, bool)
-	asCons() (Value, Value, bool)
-	asReference() (Value, func(Value), bool)
-	setReference(Value) bool
+	AsInteger() (int, bool)
+	AsBoolean() (bool, bool)
+	AsString() (string, bool)
+	AsSymbol() (string, bool)
+	AsCons() (Value, Value, bool)
+	AsReference() (Value, func(Value), bool)
+	SetReference(Value) bool
 
-	apply([]Value) (Value, error)
-	str() string
-	isAtom() bool
-	isEmpty() bool
-	isTrue() bool
-	isNil() bool
-	isFunction() bool
+	Apply([]Value) (Value, error)
+	IsAtom() bool
+	IsEmpty() bool
+	IsTrue() bool
+	IsNil() bool
+	IsFunction() bool
 	//isEq() bool    -- don't think we need pointer equality for now - = is enough?
-	isEqual(Value) bool
-	typ() string
+	IsEqual(Value) bool
+	Type() string
+
+	// Internal operations.
+	displayCDR() string
+	str() string
 }

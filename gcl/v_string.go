@@ -16,11 +16,11 @@ func (v *vString) Display() string {
 	return "\"" + v.val + "\""
 }
 
-func (v *vString) DisplayCDR() string {
+func (v *vString) displayCDR() string {
 	panic(fmt.Sprintf("unchecked access to %s", v.str()))
 }
 
-func (v *vString) apply(args []Value) (Value, error) {
+func (v *vString) Apply(args []Value) (Value, error) {
 	return nil, fmt.Errorf("Value %s not applicable", v.str())
 }
 
@@ -28,87 +28,79 @@ func (v *vString) str() string {
 	return fmt.Sprintf("VString[%s]", v.str())
 }
 
-func (v *vString) isAtom() bool {
+func (v *vString) IsAtom() bool {
 	return true
 }
 
-func (v *vString) isSymbol() bool {
+func (v *vString) IsSymbol() bool {
 	return false
 }
 
-func (v *vString) isCons() bool {
+func (v *vString) IsCons() bool {
 	return false
 }
 
-func (v *vString) isEmpty() bool {
+func (v *vString) IsEmpty() bool {
 	return false
 }
 
-func (v *vString) isNumber() bool {
+func (v *vString) IsNumber() bool {
 	return false
 }
 
-func (v *vString) isBool() bool {
+func (v *vString) IsBool() bool {
 	return false
 }
 
-func (v *vString) isString() bool {
+func (v *vString) IsString() bool {
 	return true
 }
 
-func (v *vString) isFunction() bool {
+func (v *vString) IsFunction() bool {
 	return false
 }
 
-func (v *vString) isTrue() bool {
+func (v *vString) IsTrue() bool {
 	return (v.val != "")
 }
 
-func (v *vString) isNil() bool {
+func (v *vString) IsNil() bool {
 	return false
 }
 
-func (v *vString) isEqual(vv Value) bool {
-	str, ok := vv.asString()
+func (v *vString) IsEqual(vv Value) bool {
+	str, ok := vv.AsString()
 	return ok && v.val == str
 }
 
-func (v *vString) typ() string {
+func (v *vString) Type() string {
 	return "string"
 }
 
-func (v *vString) asInteger() (int, bool) {
+func (v *vString) AsInteger() (int, bool) {
 	return 0, false
 }
 
-func (v *vString) asBoolean() (bool, bool) {
+func (v *vString) AsBoolean() (bool, bool) {
 	return false, false
 }
 
-func (v *vString) asString() (string, bool) {
+func (v *vString) AsString() (string, bool) {
 	return v.val, true
 }
 
-func (v *vString) asSymbol() (string, bool) {
+func (v *vString) AsSymbol() (string, bool) {
 	return "", false
 }
 
-func (v *vString) asCons() (Value, Value, bool) {
+func (v *vString) AsCons() (Value, Value, bool) {
 	return nil, nil, false
 }
 
-func (v *vString) asReference() (Value, func(Value), bool) {
+func (v *vString) AsReference() (Value, func(Value), bool) {
 	return nil, nil, false
 }
 
-func (v *vString) setReference(Value) bool {
+func (v *vString) SetReference(Value) bool {
 	return false
-}
-
-func (v *vString) asArray() ([]Value, bool) {
-	return nil, false
-}
-
-func (v *vString) asDict() (map[string]Value, bool) {
-	return nil, false
 }

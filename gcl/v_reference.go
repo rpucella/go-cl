@@ -16,11 +16,11 @@ func (v *vReference) Display() string {
 	return fmt.Sprintf("#<ref %s>", v.content.Display())
 }
 
-func (v *vReference) DisplayCDR() string {
+func (v *vReference) displayCDR() string {
 	panic(fmt.Sprintf("unchecked access to %s", v.str()))
 }
 
-func (v *vReference) apply(args []Value) (Value, error) {
+func (v *vReference) Apply(args []Value) (Value, error) {
 	if len(args) > 1 {
 		return nil, fmt.Errorf("too many arguments %d to ref update", len(args))
 	}
@@ -35,90 +35,82 @@ func (v *vReference) str() string {
 	return fmt.Sprintf("VReference[%s]", v.content.str())
 }
 
-func (v *vReference) isAtom() bool {
+func (v *vReference) IsAtom() bool {
 	return false // ?
 }
 
-func (v *vReference) isSymbol() bool {
+func (v *vReference) IsSymbol() bool {
 	return false
 }
 
-func (v *vReference) isCons() bool {
+func (v *vReference) IsCons() bool {
 	return false
 }
 
-func (v *vReference) isEmpty() bool {
+func (v *vReference) IsEmpty() bool {
 	return false
 }
 
-func (v *vReference) isNumber() bool {
+func (v *vReference) IsNumber() bool {
 	return false
 }
 
-func (v *vReference) isBool() bool {
+func (v *vReference) IsBool() bool {
 	return false
 }
 
-func (v *vReference) isString() bool {
+func (v *vReference) IsString() bool {
 	return false
 }
 
-func (v *vReference) isFunction() bool {
+func (v *vReference) IsFunction() bool {
 	return false
 }
 
-func (v *vReference) isTrue() bool {
+func (v *vReference) IsTrue() bool {
 	return false
 }
 
-func (v *vReference) isNil() bool {
+func (v *vReference) IsNil() bool {
 	return false
 }
 
-func (v *vReference) isEqual(vv Value) bool {
+func (v *vReference) IsEqual(vv Value) bool {
 	return v == vv // pointer equality
 }
 
-func (v *vReference) typ() string {
+func (v *vReference) Type() string {
 	return "reference"
 }
 
-func (v *vReference) asInteger() (int, bool) {
+func (v *vReference) AsInteger() (int, bool) {
 	return 0, false
 }
 
-func (v *vReference) asBoolean() (bool, bool) {
+func (v *vReference) AsBoolean() (bool, bool) {
 	return false, false
 }
 
-func (v *vReference) asString() (string, bool) {
+func (v *vReference) AsString() (string, bool) {
 	return "", false
 }
 
-func (v *vReference) asSymbol() (string, bool) {
+func (v *vReference) AsSymbol() (string, bool) {
 	return "", false
 }
 
-func (v *vReference) asCons() (Value, Value, bool) {
+func (v *vReference) AsCons() (Value, Value, bool) {
 	return nil, nil, false
 }
 
-func (v *vReference) asReference() (Value, func(Value), bool) {
+func (v *vReference) AsReference() (Value, func(Value), bool) {
 	update := func(cv Value) {
 		v.content = cv
 	}
 	return v.content, update, true
 }
 
-func (v *vReference) setReference(val Value) bool {
+func (v *vReference) SetReference(val Value) bool {
 	v.content = val
 	return true
-}
-
-func (v *vReference) asArray() ([]Value, bool) {
-	return nil, false
-}
-
-func (v *vReference) asDict() (map[string]Value, bool) {
-	return nil, false
 }

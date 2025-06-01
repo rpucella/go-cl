@@ -25,14 +25,14 @@ func (v MutableCons) setTail(tail Value) {
 }
 
 func (v *vCons) Display() string {
-	return "(" + v.head.Display() + v.tail.DisplayCDR()
+	return "(" + v.head.Display() + v.tail.displayCDR()
 }
 
-func (v *vCons) DisplayCDR() string {
-	return " " + v.head.Display() + v.tail.DisplayCDR()
+func (v *vCons) displayCDR() string {
+	return " " + v.head.Display() + v.tail.displayCDR()
 }
 
-func (v *vCons) apply(args []Value) (Value, error) {
+func (v *vCons) Apply(args []Value) (Value, error) {
 	return nil, fmt.Errorf("Value %s not applicable", v.str())
 }
 
@@ -40,102 +40,95 @@ func (v *vCons) str() string {
 	return fmt.Sprintf("VCons[%s %s]", v.head.str(), v.tail.str())
 }
 
-func (v *vCons) isAtom() bool {
+func (v *vCons) IsAtom() bool {
 	return false
 }
 
-func (v *vCons) isSymbol() bool {
+func (v *vCons) IsSymbol() bool {
 	return false
 }
 
-func (v *vCons) isCons() bool {
+func (v *vCons) IsCons() bool {
 	return true
 }
 
-func (v *vCons) isEmpty() bool {
+func (v *vCons) IsEmpty() bool {
 	return false
 }
 
-func (v *vCons) isNumber() bool {
+func (v *vCons) IsNumber() bool {
 	return false
 }
 
-func (v *vCons) isBool() bool {
+func (v *vCons) IsBool() bool {
 	return false
 }
 
-func (v *vCons) isString() bool {
+func (v *vCons) IsString() bool {
 	return false
 }
 
-func (v *vCons) isFunction() bool {
+func (v *vCons) IsFunction() bool {
 	return false
 }
 
-func (v *vCons) isTrue() bool {
+func (v *vCons) IsTrue() bool {
 	return true
 }
 
-func (v *vCons) isNil() bool {
+func (v *vCons) IsNil() bool {
 	return false
 }
 
-func (v *vCons) isEqual(vv Value) bool {
-	if _, _, ok := vv.asCons(); !ok {
+func (v *vCons) IsEqual(vv Value) bool {
+	if _, _, ok := vv.AsCons(); !ok {
 		return false
 	}
 	var curr1 Value = v
 	var curr2 Value = vv
-	for head1, tail1, ok := v.asCons(); ok; head1, tail1, ok = tail1.asCons() {
-		head2, tail2, ok := curr2.asCons()
+	for head1, tail1, ok := v.AsCons(); ok; head1, tail1, ok = tail1.AsCons() {
+		head2, tail2, ok := curr2.AsCons()
 		if !ok {
 			return false
 		}
-		if !head1.isEqual(head2) {
+		if !head1.IsEqual(head2) {
 			return false
 		}
 		curr1 = tail1
 		curr2 = tail2
 	}
-	return curr1.isEqual(curr2) // should both be empty at the end
+	return curr1.IsEqual(curr2) // should both be empty at the end
 }
 
-func (v *vCons) typ() string {
+func (v *vCons) Type() string {
 	return "list"
 }
 
-func (v *vCons) asInteger() (int, bool) {
+func (v *vCons) AsInteger() (int, bool) {
 	return 0, false
 }
 
-func (v *vCons) asBoolean() (bool, bool) {
+func (v *vCons) AsBoolean() (bool, bool) {
 	return false, false
 }
 
-func (v *vCons) asString() (string, bool) {
+func (v *vCons) AsString() (string, bool) {
 	return "", false
 }
 
-func (v *vCons) asSymbol() (string, bool) {
+func (v *vCons) AsSymbol() (string, bool) {
 	return "", false
 }
 
-func (v *vCons) asCons() (Value, Value, bool) {
+func (v *vCons) AsCons() (Value, Value, bool) {
 	return v.head, v.tail, true
 }
 
-func (v *vCons) asReference() (Value, func(Value), bool) {
+func (v *vCons) AsReference() (Value, func(Value), bool) {
 	return nil, nil, false
 }
 
-func (v *vCons) setReference(Value) bool {
+func (v *vCons) SetReference(Value) bool {
 	return false
 }
 
-func (v *vCons) asArray() ([]Value, bool) {
-	return nil, false
-}
-
-func (v *vCons) asDict() (map[string]Value, bool) {
-	return nil, false
-}
