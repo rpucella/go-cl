@@ -48,7 +48,7 @@ func allConses(vs []Value) bool {
 
 func corePrimitives() map[string]Value {
 	bindings := map[string]Value{}
-	for _, d := range CORE_PRIMITIVES {
+	for _, d := range primList {
 		bindings[d.name] = NewPrimitive(d.name, MakePrimitive(d))
 	}
 	return bindings
@@ -142,7 +142,7 @@ func mkNumPredicate(pred func(int, int) bool) func(string, []Value) (Value, erro
 	}
 }
 
-var CORE_PRIMITIVES = []Primitive{
+var primList = []Primitive{
 
 	Primitive{
 		"type", 1, 1,
@@ -642,22 +642,6 @@ var CORE_PRIMITIVES = []Primitive{
 		},
 	},
 
-	// set should probably be a special form
-	// (set (x) 10)
-	// (set (arr 1) 10)
-	// (set (dict 'a) 10)
-	// like setf in CLISP
-
-	// Primitive{"set", 2, 2,
-	// 	func(name string, args []Value) (Value, error) {
-	// 		if err := checkArgType(name, args[0], isReference); err != nil {
-	// 			return nil, err
-	// 		}
-	// 		args[0].setValue(args[1])
-	// 		return NewNil(), nil
-	// 	},
-	// },
-
 	Primitive{"empty?", 1, 1,
 		func(name string, args []Value) (Value, error) {
 			return NewBoolean(args[0].isEmpty()), nil
@@ -729,63 +713,4 @@ var CORE_PRIMITIVES = []Primitive{
 			return NewBoolean(args[0].isNil()), nil
 		},
 	},
-
-	Primitive{"array", 0, -1,
-		func(name string, args []Value) (Value, error) {
-			content := make([]Value, len(args))
-			for i, v := range args {
-				content[i] = v
-			}
-			return NewArray(content), nil
-		},
-	},
-
-	Primitive{"array?", 1, 1,
-		func(name string, args []Value) (Value, error) {
-			_, ok := args[0].asArray()
-			return NewBoolean(ok), nil
-		},
-	},
-
-	Primitive{"dict", 0, -1,
-		func(name string, args []Value) (Value, error) {
-			content := make(map[string]Value, len(args))
-			for _, v := range args {
-				head, tail, ok := v.asCons()
-				if !ok {
-					return nil, fmt.Errorf("dict item not a pair - %s", v.Display())
-				}
-				head2, tail, ok := tail.asCons()
-				if !ok || !tail.isEmpty() {
-					return nil, fmt.Errorf("dict item not a pair - %s", v.Display())
-				}
-				name, ok := head.asSymbol()
-				if !ok {
-					return nil, fmt.Errorf("dict key is not a symbol - %s", head.Display())
-				}
-				content[name] = head2
-			}
-			return NewDict(content), nil
-		},
-	},
-
-	Primitive{"dict?", 1, 1,
-		func(name string, args []Value) (Value, error) {
-			_, ok := args[0].asDict()
-			return NewBoolean(ok), nil
-		},
-	},
-
-	Primitive{
-		"quit", 0, 0,
-		func(name string, args []Value) (Value, error) {
-			bail()
-			return NewNil(), nil
-		},
-	},
 }
-
-// left:
-//
-// dictionaries #((a 1) (b 2))  (dict '(a 10) '(b 20) '(c 30))  vs (apply dict '((a 10) (b 20) (c 30)))?
-// arrays #[a b c]

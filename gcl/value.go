@@ -11,8 +11,6 @@ type Value interface {
 	asCons() (Value, Value, bool)
 	asReference() (Value, func(Value), bool)
 	setReference(Value) bool
-	asArray() ([]Value, bool)
-	asDict() (map[string]Value, bool)
 
 	apply([]Value) (Value, error)
 	str() string
