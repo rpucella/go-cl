@@ -1,4 +1,4 @@
-package gcl
+package gocl
 
 import "errors"
 import "fmt"

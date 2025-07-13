@@ -1,4 +1,4 @@
-package gcl
+package gocl
 
 import "fmt"
 import "strings"
@@ -8,6 +8,14 @@ type Primitive struct {
 	min  int
 	max  int // <0 for no max #
 	prim func(string, []Value) (Value, error)
+}
+
+type Command struct {
+	// A command is like a primitive that also takes optional flags as inputs.
+	name string
+	min int
+	max int  // <0 for no max #
+	prim func(string, []Value, map[string]bool)
 }
 
 func listLength(v Value) int {
@@ -53,6 +61,8 @@ func corePrimitives() map[string]Value {
 	}
 	return bindings
 }
+
+// func MakeCommand(d Primitive)
 
 func MakePrimitive(d Primitive) func([]Value) (Value, error) {
 	f := func(args []Value) (Value, error) {

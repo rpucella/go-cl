@@ -1,2 +1,2 @@
 build:
-	go build -o bin/gcl cmd/gcl/*.go
+	go build -o bin/gocli cmd/gocli/*.go

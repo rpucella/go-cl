@@ -1,4 +1,4 @@
-package gcl
+package gocl
 
 type Value interface {
 	Display() string
