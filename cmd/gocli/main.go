@@ -11,6 +11,8 @@ import (
 
 var exitFlag bool = false
 
+const version = "1.0.0"
+
 func main() {
 	eng := gocl.NewEngine()
 	eng.AddDefaultHelpCommand()
@@ -20,10 +22,15 @@ func main() {
 	eng.AddPrimitive("exit", 0, 0, primitiveExit)
 	if len(os.Args) > 1 {
 		// We have command-line parameters.
-		// Do nothing for now.
-		fmt.Println("(Skip command line arguments processing)")
+		v, err := eng.ReadCommandWords(os.Args[1:])
+		if err != nil {
+			fmt.Println(fmt.Errorf("Error: %w", err))
+			return
+		}
+		eng.Eval(v)
+		return
 	}
-	fmt.Println("Go Command Language Standalone Interpreter 1.0.0.")
+	fmt.Printf("Go Command Language Standalone Interpreter %s.\n", version)
 	fmt.Println("Type help for available commands.")
 	fmt.Println("Type repl for the REPL loop.")
 	loop(eng)
@@ -77,6 +84,7 @@ func repl(eng gocl.Engine) {
 	prompt := "GoLisp"
 	reader := bufio.NewReader(os.Stdin)
 
+	fmt.Printf("Go Command Language Standalone Interpreter REPL %s.\n", version)
 	fmt.Println("Type (exit) to leave the repl.")
 	for {
 		fmt.Printf("%s> ", prompt)

@@ -2,6 +2,7 @@ package gocl
 
 import (
 	"fmt"
+	"strings"
 )
 
 type Engine struct {
@@ -161,6 +162,36 @@ func (e *Engine) ReadCommand(line string) (Value, error) {
 		result = NewCons(args[i], result)
 	}
 	return NewCons(head, result), nil
+}
+
+func (e *Engine) ReadCommandWords(words []string) (Value, error) {
+	if len(words) == 0 {
+		return nil, fmt.Errorf("no command given")
+	}
+	result := NewEmpty()
+	for i := len(words) - 1; i >= 0; i-- {
+		w := strings.TrimSpace(words[i])
+		v, rest, err := read(strings.TrimSpace(w))
+		if err != nil {
+			return nil, err
+		}
+		if i == 0 {
+			comm, ok := v.AsSymbol()
+			if !ok || !contains(e.commands, comm) {
+				return nil, fmt.Errorf("unknown command: %s", comm)
+			}
+			result = NewCons(v, result)
+		} else if rest != "" {
+			result = NewCons(NewString(w), result)
+		} else if sym, ok := v.AsSymbol(); ok {
+			result = NewCons(NewString(sym), result)
+		} else if v.IsAtom() {
+			result = NewCons(v, result)
+		} else {
+			return nil, fmt.Errorf("malformed command")
+		}
+	}
+	return result, nil
 }
 
 func (e *Engine) AddDefaultHelpCommand() {
