@@ -99,6 +99,10 @@ func (v *vReference) AsSymbol() (string, bool) {
 	return "", false
 }
 
+func (v *vReference) AsFlag() (string, bool) {
+	return "", false
+}
+
 func (v *vReference) AsCons() (Value, Value, bool) {
 	return nil, nil, false
 }

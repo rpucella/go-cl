@@ -101,6 +101,10 @@ func (v *vBoolean) AsSymbol() (string, bool) {
 	return "", false
 }
 
+func (v *vBoolean) AsFlag() (string, bool) {
+	return "", false
+}
+
 func (v *vBoolean) AsCons() (Value, Value, bool) {
 	return nil, nil, false
 }

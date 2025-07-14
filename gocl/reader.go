@@ -55,6 +55,9 @@ func readSymbol(s string) (Value, string) {
 	if result == "false" {
 		return &vBoolean{false}, rest
 	}
+	if len(result) > 2 && result[0] == '-' && result[1] == '-' {
+		return &vFlag{result[2:]}, rest
+	}
 	return &vSymbol{result}, rest
 }
 

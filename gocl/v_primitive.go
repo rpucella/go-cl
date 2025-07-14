@@ -93,6 +93,10 @@ func (v *vPrimitive) AsSymbol() (string, bool) {
 	return "", false
 }
 
+func (v *vPrimitive) AsFlag() (string, bool) {
+	return "", false
+}
+
 func (v *vPrimitive) AsCons() (Value, Value, bool) {
 	return nil, nil, false
 }

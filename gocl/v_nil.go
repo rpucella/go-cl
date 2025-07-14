@@ -91,6 +91,10 @@ func (v *vVoid) AsSymbol() (string, bool) {
 	return "", false
 }
 
+func (v *vVoid) AsFlag() (string, bool) {
+	return "", false
+}
+
 func (v *vVoid) AsCons() (Value, Value, bool) {
 	return nil, nil, false
 }

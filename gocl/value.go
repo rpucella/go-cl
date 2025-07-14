@@ -8,6 +8,7 @@ type Value interface {
 	AsString() (string, bool)
 	AsSymbol() (string, bool)
 	AsCons() (Value, Value, bool)
+	AsFlag() (string, bool)
 	AsReference() (Value, func(Value), bool)
 	SetReference(Value) bool
 

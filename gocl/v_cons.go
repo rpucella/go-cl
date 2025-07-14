@@ -120,6 +120,10 @@ func (v *vCons) AsSymbol() (string, bool) {
 	return "", false
 }
 
+func (v *vCons) AsFlag() (string, bool) {
+	return "", false
+}
+
 func (v *vCons) AsCons() (Value, Value, bool) {
 	return v.head, v.tail, true
 }

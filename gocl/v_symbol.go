@@ -93,6 +93,10 @@ func (v *vSymbol) AsSymbol() (string, bool) {
 	return v.name, true
 }
 
+func (v *vSymbol) AsFlag() (string, bool) {
+	return "", false
+}
+
 func (v *vSymbol) AsCons() (Value, Value, bool) {
 	return nil, nil, false
 }

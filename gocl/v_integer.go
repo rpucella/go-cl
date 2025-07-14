@@ -93,6 +93,10 @@ func (v *vInteger) AsSymbol() (string, bool) {
 	return "", false
 }
 
+func (v *vInteger) AsFlag() (string, bool) {
+	return "", false
+}
+
 func (v *vInteger) AsCons() (Value, Value, bool) {
 	return nil, nil, false
 }
