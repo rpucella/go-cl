@@ -1,3 +1,3 @@
-module rpucella.net/go-cl
+module github.com/rpucella/go-cl
 
 go 1.13
