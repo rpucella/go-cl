@@ -6,7 +6,7 @@ import (
 	"strings"
 	"bufio"
 	"os"
-	"rpucella.net/go-cl/gocl"
+	"github.com/rpucella/go-cl/gocl"
 )
 
 var exitFlag bool = false
