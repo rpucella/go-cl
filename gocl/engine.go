@@ -110,10 +110,34 @@ func (e *Engine) Eval(sexpr Value) (Value, error) {
 
 
 func (e *Engine) AddCommand(name string, helpArgs string, min int, max int, flags []string, p func(string, []Value) (Value, error)) {
-	pr := NewPrimitive(name, MakePrimitive(Primitive{name, min, max, p}))
+	// For a command, all flags are coalesced together into a list passed as the first argument to the underlying primitive.
+	new_min := min + 1
+	new_max := -1
+	if max >= 0 {
+		new_max = max + 1
+	}
+	pp := MakePrimitive(Primitive{name, new_min, new_max, p})
+	pr := NewPrimitive(name, wrapCommandPrimitive(pp))
 	e.commands = append(e.commands, name)
 	e.helpArgs = append(e.helpArgs, helpArgs)
 	update(e.env, name, pr)
+}
+
+func wrapCommandPrimitive(p func ([]Value) (Value, error)) (func ( []Value) (Value, error)) {
+	pp := func (args []Value) (Value, error) {
+		flags := NewEmpty()
+		result := []Value{nil}
+		for _, v := range args {
+			if _, ok := v.AsFlag(); ok {
+				flags = NewCons(v, flags)
+			} else {
+				result = append(result, v)
+			}
+		}
+		result[0] = flags
+		return p(result)
+	}
+	return pp
 }
 
 func contains(slice []string, item string) bool {

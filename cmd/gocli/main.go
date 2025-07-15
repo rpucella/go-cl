@@ -41,7 +41,7 @@ func loop(eng gocl.Engine) {
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
-		fmt.Printf("%s> ", prompt)
+		fmt.Printf("\n%s: ", prompt)
 		text, err := reader.ReadString('\n')
 		if err != nil {
 			if err == io.EOF {
@@ -84,7 +84,7 @@ func repl(eng gocl.Engine) {
 	prompt := "GoLisp"
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Printf("Go Command Language Standalone Interpreter REPL %s.\n", version)
+	fmt.Printf("\nGo Command Language Standalone Interpreter REPL %s.\n", version)
 	fmt.Println("Type (exit) to leave the repl.")
 	for {
 		fmt.Printf("%s> ", prompt)

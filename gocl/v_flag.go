@@ -32,27 +32,7 @@ func (v *vFlag) IsAtom() bool {
 	return true
 }
 
-func (v *vFlag) IsSymbol() bool {
-	return true
-}
-
-func (v *vFlag) IsCons() bool {
-	return false
-}
-
 func (v *vFlag) IsEmpty() bool {
-	return false
-}
-
-func (v *vFlag) IsNumber() bool {
-	return false
-}
-
-func (v *vFlag) IsBool() bool {
-	return false
-}
-
-func (v *vFlag) IsString() bool {
 	return false
 }
 
