@@ -11,7 +11,7 @@ type Engine struct {
 	helpArgs []string
 }
 
-func NewEngine() Engine {
+func NewEngine() *Engine {
 	coreBindings := corePrimitives()
 	// These are not special. They're just convenience.
 	coreBindings["empty"] = NewEmpty()
@@ -19,7 +19,7 @@ func NewEngine() Engine {
 	env := &Env{bindings: coreBindings, previous: nil}
 	commands := make([]string, 0)
 	helpArgs := make([]string, 0)
-	return Engine{env, commands, helpArgs}
+	return &Engine{env, commands, helpArgs}
 }
 
 

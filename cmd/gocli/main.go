@@ -36,8 +36,8 @@ func main() {
 	loop(eng)
 }
 
-func loop(eng gocl.Engine) {
-	prompt := "gocli"
+func loop(eng *gocl.Engine) {
+	prompt := ""
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
@@ -80,11 +80,10 @@ func primitiveQuit(name string, args []gocl.Value) (gocl.Value, error) {
 	return gocl.NewVoid(), nil
 }
 
-func repl(eng gocl.Engine) {
-	prompt := "GoLisp"
+func repl(eng *gocl.Engine) {
+	prompt := ""
 	reader := bufio.NewReader(os.Stdin)
 
-	fmt.Printf("\nGo Command Language Standalone Interpreter REPL %s.\n", version)
 	fmt.Println("Type (exit) to leave the repl.")
 	for {
 		fmt.Printf("%s> ", prompt)
@@ -133,7 +132,7 @@ func repl(eng gocl.Engine) {
 
 }
 
-func mkPrimitiveRepl(eng gocl.Engine) func(string, []gocl.Value) (gocl.Value, error) {
+func mkPrimitiveRepl(eng *gocl.Engine) func(string, []gocl.Value) (gocl.Value, error) {
 	return func(name string, args []gocl.Value) (gocl.Value, error) {
 		repl(eng)
 		return gocl.NewVoid(), nil

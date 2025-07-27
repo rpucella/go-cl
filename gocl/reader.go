@@ -161,3 +161,12 @@ func read(s string) (Value, string, error) {
 	//return nil, s, nil
 	return nil, s, errors.New("Cannot read input")
 }
+
+// Interface functions.
+func Read(s string) (Value, string, error ) {
+	return read(s)
+}
+
+func ReadList(s string) (Value, string, error) {
+	return readList(s)
+}
