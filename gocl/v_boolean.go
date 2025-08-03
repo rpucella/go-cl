@@ -2,14 +2,26 @@ package gocl
 
 import (
 	"fmt"
+	"sync"
 )
 
 type vBoolean struct {
 	val bool
 }
 
+var trueSingleton Value
+var falseSingleton Value
+var boolOnce sync.Once
+
 func NewBoolean(v bool) Value {
-	return &vBoolean{v}
+	boolOnce.Do(func() {
+		trueSingleton = &vBoolean{true}
+		falseSingleton = &vBoolean{false}
+	})
+	if v {
+		return trueSingleton
+	}
+	return falseSingleton
 }
 
 func (v *vBoolean) Display() string {

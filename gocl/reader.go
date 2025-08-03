@@ -1,9 +1,11 @@
 package gocl
 
-import "strconv"
-import "strings"
-import "regexp"
-import "errors"
+import (
+	"strconv"
+	"strings"
+	"errors"
+	"regexp"
+)
 
 func readToken(token string, s string) (string, string) {
 	r, _ := regexp.Compile(`^` + token)

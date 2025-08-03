@@ -2,13 +2,20 @@ package gocl
 
 import (
 	"fmt"
+	"sync"
 )
 
 type vEmpty struct {
 }
 
+var emptySingleton Value
+var emptyOnce sync.Once
+
 func NewEmpty() Value {
-	return &vEmpty{}
+	emptyOnce.Do(func() {
+		emptySingleton = &vEmpty{}
+	})
+	return emptySingleton
 }
 
 func (v *vEmpty) Display() string {

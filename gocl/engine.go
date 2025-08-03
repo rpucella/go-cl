@@ -124,6 +124,8 @@ func (e *Engine) AddCommand(name string, helpArgs string, min int, max int, flag
 }
 
 func wrapCommandPrimitive(p func ([]Value) (Value, error)) (func ( []Value) (Value, error)) {
+	// TODO: pass allowed flags and check against passed flags
+	// TODO: when it fails, show usage?
 	pp := func (args []Value) (Value, error) {
 		flags := NewEmpty()
 		result := []Value{nil}

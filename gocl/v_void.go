@@ -2,13 +2,20 @@ package gocl
 
 import (
 	"fmt"
+	"sync"
 )
 
 type vVoid struct {
 }
 
+var voidSingleton Value
+var voidOnce sync.Once
+
 func NewVoid() Value {
-	return &vVoid{}
+	voidOnce.Do(func() {
+		voidSingleton = &vVoid{}
+	})
+	return voidSingleton
 }
 
 func (v *vVoid) Display() string {
